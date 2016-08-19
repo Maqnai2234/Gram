@@ -16,7 +16,8 @@
     "gulp-sass": "^2.3.2",
     "materialize-css": "^0.97.6",
     "page": "^1.7.1",
-    "pug": "^2.0.0-beta3"
+    "pug": "^2.0.0-beta3",
+    "title": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",

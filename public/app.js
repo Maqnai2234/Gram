@@ -2333,6 +2333,29 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],14:[function(require,module,exports){
+
+var orig = document.title;
+
+exports = module.exports = set;
+
+function set(str) {
+  var i = 1;
+  var args = arguments;
+  document.title = str.replace(/%[os]/g, function(_){
+    switch (_) {
+      case '%o':
+        return orig;
+      case '%s':
+        return args[i++];
+    }
+  });
+}
+
+exports.reset = function(){
+  set(orig);
+};
+
+},{}],15:[function(require,module,exports){
 var bel = require('bel') // turns template tag into DOM elements
 var morphdom = require('morphdom') // efficiently diffs + morphs two DOM elements
 var defaultEvents = require('./update-events.js') // default events to be copied when dom elements update
@@ -2368,7 +2391,7 @@ module.exports.update = function (fromNode, toNode, opts) {
   }
 }
 
-},{"./update-events.js":15,"bel":1,"morphdom":9}],15:[function(require,module,exports){
+},{"./update-events.js":16,"bel":1,"morphdom":9}],16:[function(require,module,exports){
 module.exports = [
   // attribute events (can be set with attributes)
   'onclick',
@@ -2406,15 +2429,56 @@ module.exports = [
   'onfocusout'
 ]
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var page = require('page');
+var empty = require('empty-element');
+var template = require('./template');
+var title = require("title");
 
 page('/', function (ctx, next) {
-  var main = document.getElementById("main-container");
-  main.innerHTML = '<a href="/signup">Signup</a>'; //home
+  title('Platzigram');
+  var main = document.getElementById('main-container');
+
+  var pictures = [{
+    user: {
+      username: "alexeim",
+      avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
+    },
+    url: 'office.jpg',
+    likes: 20,
+    liked: true
+  }, {
+    user: {
+      username: "alexeim2",
+      avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
+    },
+    url: 'office.jpg',
+    likes: 2,
+    liked: true
+  }];
+
+  empty(main).appendChild(template(pictures));
 });
 
-},{"page":11}],17:[function(require,module,exports){
+},{"./template":18,"empty-element":3,"page":11,"title":14}],18:[function(require,module,exports){
+var yo = require('yo-yo');
+var layout = require('../layout');
+var picture = require('../picture-card');
+
+module.exports = function (pictures) {
+  var el = yo`<div class="container timeline">
+    <div class="row">
+      <div class="col s12 m10 offset-m1 l6 offset-l3">
+        ${ pictures.map(function (pic) {
+    return picture(pic);
+  }) }
+      </div>
+    </div>
+  </div>`;
+  return layout(el);
+};
+
+},{"../layout":21,"../picture-card":22,"yo-yo":15}],19:[function(require,module,exports){
 var page = require('page');
 
 require('./homepage');
@@ -2423,11 +2487,11 @@ require('./signin');
 
 page();
 
-},{"./homepage":16,"./signin":19,"./signup":21,"page":11}],18:[function(require,module,exports){
+},{"./homepage":17,"./signin":23,"./signup":25,"page":11}],20:[function(require,module,exports){
 var yo = require('yo-yo');
 
 module.exports = function landing(box) {
-  return yo`<div class="container">
+  return yo`<div class="container landing">
     <div class="row">
       <div class="col s10 push-s1">
         <div class="row">
@@ -2441,17 +2505,73 @@ module.exports = function landing(box) {
   </div>`;
 };
 
-},{"yo-yo":14}],19:[function(require,module,exports){
+},{"yo-yo":15}],21:[function(require,module,exports){
+var yo = require('yo-yo');
+
+module.exports = function layout(content) {
+  return yo`<div>
+    <nav class="header">
+      <div class="nav-wrapper">
+        <div class="container">
+          <div class="row">
+            <div class="col s12 m6 offset-m1">
+              <a href="/" class="brand-logo title-logo">CloneGram</a>
+            </div>
+            <div class="col s2 m6 push-s10 push-m10">
+              <a class="btn btn-large btn-flat dropdown-button" href="#" data-activates="drop-user">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+              <ul id="drop-user" class="dropdown-content">
+                <li><a href="#">Salir</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="content">
+      ${ content }
+    </div>
+  </div>`;
+};
+
+},{"yo-yo":15}],22:[function(require,module,exports){
+var yo = require('yo-yo');
+
+module.exports = function (pic) {
+  return yo`<div class="card">
+    <div class="card-image">
+      <img class="activator" src="${ pic.url }">
+    </div>
+    <div class="card-content">
+      <a href="/user/${ pic.user.username }" class="card-title">
+        <img src="${ pic.user.avatar }" class="avatar">
+        <span class="username">${ pic.user.username }</span>
+      </a>
+      <small class="right time">Hace 1 día </small>
+      <p>
+        <a class="left" href="#">
+          <i class="fa fa-heart-o" aria-hidden="true"></i>
+        </a>
+        <span class="left likes">${ pic.likes } me gusta</span>
+      </p>
+    </div>
+  </div>`;
+};
+
+},{"yo-yo":15}],23:[function(require,module,exports){
 var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
+var title = require("title");
 
 page('/signin', function (ctx, next) {
+  title('Platzigram | Signin');
   var main = document.getElementById('main-container');
   empty(main).appendChild(template);
 });
 
-},{"./template":20,"empty-element":3,"page":11}],20:[function(require,module,exports){
+},{"./template":24,"empty-element":3,"page":11,"title":14}],24:[function(require,module,exports){
 var yo = require('yo-yo');
 var landing = require('../landing');
 
@@ -2462,7 +2582,7 @@ var signinForm = yo`<div class="col s12 m7">
       <form class="signup-form">
         <div class="section">
           <a href="" class="btn btn-fb hide-on-small-only"> Iniciar sesión con Facebook</a>
-          <a href="" class="btn btn-fb hide-on-med-and-up"> Iniciar sesión</a>
+          <a href="" class="btn btn-fb hide-on-med-and-up"> <i class="fa fa-facebook-official" aria-hidden="true"></i> Iniciar sesión</a>
         </div>
         <div class="divider"></div>
         <div class="section">
@@ -2482,17 +2602,18 @@ var signinForm = yo`<div class="col s12 m7">
 
 module.exports = landing(signinForm);
 
-},{"../landing":18,"yo-yo":14}],21:[function(require,module,exports){
+},{"../landing":20,"yo-yo":15}],25:[function(require,module,exports){
 var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
-
+var title = require('title');
 page('/signup', function (ctx, next) {
+  title('Platzigram | Signup');
   var main = document.getElementById('main-container');
   empty(main).appendChild(template);
 });
 
-},{"./template":22,"empty-element":3,"page":11}],22:[function(require,module,exports){
+},{"./template":26,"empty-element":3,"page":11,"title":14}],26:[function(require,module,exports){
 var yo = require('yo-yo');
 var landing = require('../landing');
 
@@ -2504,7 +2625,7 @@ var signupForm = yo`<div class="col s12 m7">
         <h2>Regístrate para ver fotos de  tus amigos</h2>
         <div class="section">
           <a href="" class="btn btn-fb hide-on-small-only"> Iniciar sesión con Facebook</a>
-          <a href="" class="btn btn-fb hide-on-med-and-up"> Iniciar sesión</a>
+          <a href="" class="btn btn-fb hide-on-med-and-up"> <i class="fa fa-facebook-official" aria-hidden="true"></i> Iniciar sesión</a>
         </div>
         <div class="divider"></div>
         <div class="section">
@@ -2526,4 +2647,4 @@ var signupForm = yo`<div class="col s12 m7">
 
 module.exports = landing(signupForm);
 
-},{"../landing":18,"yo-yo":14}]},{},[17]);
+},{"../landing":20,"yo-yo":15}]},{},[19]);

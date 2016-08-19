@@ -1,0 +1,36 @@
+{
+  "name": "gram",
+  "version": "0.1.0",
+  "description": "This is a clone inspired in Instagram.",
+  "main": "server.js",
+  "keywords": [
+    "gram",
+    "javascript",
+    "clone"
+  ],
+  "author": "Alexei",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2",
+    "materialize-css": "^0.97.6",
+    "page": "^1.7.1",
+    "pug": "^2.0.0-beta3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "empty-element": "^1.0.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "vinyl-source-stream": "^1.1.0",
+    "yo-yo": "^1.2.2"
+  },
+  "scripts": {
+    "build": "gulp",
+    "start": "gulp watch & node server.js"
+  }
+}

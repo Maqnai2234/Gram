@@ -14,8 +14,9 @@ page('/', function(ctx, next){
           avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
         },
         url: 'office.jpg',
-        likes: 20,
-        liked: true
+        likes: 0,
+        liked: false,
+        createdAt: new Date()
     },
     {
         user: {
@@ -24,7 +25,8 @@ page('/', function(ctx, next){
         },
         url: 'office.jpg',
         likes: 2,
-        liked: true
+        liked: true,
+        createdAt: new Date().setDate(new Date().getDate() - 10)
     }
   ];
 

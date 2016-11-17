@@ -9349,6 +9349,31 @@ module.exports = [
 ]
 
 },{}],38:[function(require,module,exports){
+var yo = require('yo-yo');
+var translate = require('../translate');
+
+var el = yo`<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 l3 center-align"><a href="#" data-activates="dropdown1" class="dropdown-button btn btn-flat">${ translate.message('language') }</a>
+        <ul id="dropdown1" class="dropdown-content">
+          <li><a href="#" onclick=${ lang.bind(null, 'es') }>${ translate.message('spanish') }</a></li>
+          <li><a href="#" onclick=${ lang.bind(null, 'en-US') }>${ translate.message('english') }</a></li>
+        </ul>
+      </div>
+      <div class="col s12 l3 push-l6 center-align">™ 2016 CLONEGRAM</div>
+    </div>
+  </div>
+</footer>`;
+
+function lang(locale) {
+  localStorage.locale = locale;
+  location.reload();
+}
+
+document.body.appendChild(el);
+
+},{"../translate":51,"yo-yo":36}],39:[function(require,module,exports){
 var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
@@ -9381,7 +9406,7 @@ page('/', function (ctx, next) {
   empty(main).appendChild(template(pictures));
 });
 
-},{"./template":39,"empty-element":3,"page":32,"title":35}],39:[function(require,module,exports){
+},{"./template":40,"empty-element":3,"page":32,"title":35}],40:[function(require,module,exports){
 var yo = require('yo-yo');
 var layout = require('../layout');
 var picture = require('../picture-card');
@@ -9399,16 +9424,17 @@ module.exports = function (pictures) {
   return layout(el);
 };
 
-},{"../layout":42,"../picture-card":43,"yo-yo":36}],40:[function(require,module,exports){
+},{"../layout":43,"../picture-card":44,"yo-yo":36}],41:[function(require,module,exports){
 var page = require('page');
 
 require('./homepage');
 require('./signup');
 require('./signin');
+require('./footer');
 
 page();
 
-},{"./homepage":38,"./signin":44,"./signup":46,"page":32}],41:[function(require,module,exports){
+},{"./footer":38,"./homepage":39,"./signin":45,"./signup":47,"page":32}],42:[function(require,module,exports){
 var yo = require('yo-yo');
 
 module.exports = function landing(box) {
@@ -9426,9 +9452,9 @@ module.exports = function landing(box) {
   </div>`;
 };
 
-},{"yo-yo":36}],42:[function(require,module,exports){
+},{"yo-yo":36}],43:[function(require,module,exports){
 var yo = require('yo-yo');
-
+var translate = require('../translate');
 module.exports = function layout(content) {
   return yo`<div>
     <nav class="header">
@@ -9443,7 +9469,7 @@ module.exports = function layout(content) {
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a>
               <ul id="drop-user" class="dropdown-content">
-                <li><a href="#">Salir</a></li>
+                <li><a href="#">${ translate.message('logout') }</a></li>
               </ul>
             </div>
           </div>
@@ -9456,7 +9482,7 @@ module.exports = function layout(content) {
   </div>`;
 };
 
-},{"yo-yo":36}],43:[function(require,module,exports){
+},{"../translate":51,"yo-yo":36}],44:[function(require,module,exports){
 var yo = require('yo-yo');
 
 var translate = require('../translate');
@@ -9499,7 +9525,7 @@ module.exports = function PictureCard(pic) {
   return el;
 };
 
-},{"../translate":50,"yo-yo":36}],44:[function(require,module,exports){
+},{"../translate":51,"yo-yo":36}],45:[function(require,module,exports){
 var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
@@ -9511,7 +9537,7 @@ page('/signin', function (ctx, next) {
   empty(main).appendChild(template);
 });
 
-},{"./template":45,"empty-element":3,"page":32,"title":35}],45:[function(require,module,exports){
+},{"./template":46,"empty-element":3,"page":32,"title":35}],46:[function(require,module,exports){
 var yo = require('yo-yo');
 var landing = require('../landing');
 var translate = require('../translate');
@@ -9543,7 +9569,7 @@ var signinForm = yo`<div class="col s12 m7">
 
 module.exports = landing(signinForm);
 
-},{"../landing":41,"../translate":50,"yo-yo":36}],46:[function(require,module,exports){
+},{"../landing":42,"../translate":51,"yo-yo":36}],47:[function(require,module,exports){
 var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
@@ -9554,7 +9580,7 @@ page('/signup', function (ctx, next) {
   empty(main).appendChild(template);
 });
 
-},{"./template":47,"empty-element":3,"page":32,"title":35}],47:[function(require,module,exports){
+},{"./template":48,"empty-element":3,"page":32,"title":35}],48:[function(require,module,exports){
 var yo = require('yo-yo');
 var landing = require('../landing');
 var translate = require('../translate');
@@ -9589,7 +9615,7 @@ var signupForm = yo`<div class="col s12 m7">
 
 module.exports = landing(signupForm);
 
-},{"../landing":41,"../translate":50,"yo-yo":36}],48:[function(require,module,exports){
+},{"../landing":42,"../translate":51,"yo-yo":36}],49:[function(require,module,exports){
 module.exports = {
         'likes': '{ likes, plural, ' + '=0 {no likes}' + '=1 {# like}' + 'other {# likes}}',
         'logout': 'Logout',
@@ -9609,7 +9635,7 @@ module.exports = {
         'language': 'Language'
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 module.exports = {
   'likes': '{ likes, number } me gusta',
   'logout': 'Salir',
@@ -9629,7 +9655,7 @@ module.exports = {
   'language': 'Idioma'
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 if (!window.Intl) {
   window.Intl = require('intl');
   require('intl/locale-data/jsonp/en-US.js');
@@ -9649,7 +9675,7 @@ var MESSAGES = {};
 MESSAGES.es = es;
 MESSAGES['en-US'] = en;
 
-var locale = 'en-US';
+var locale = localStorage.locale || 'es';
 
 module.exports = {
   message: function (text, opts) {
@@ -9660,4 +9686,4 @@ module.exports = {
   date: new IntlRelativeFormat(locale)
 };
 
-},{"./en-US":48,"./es":49,"intl":25,"intl-messageformat":10,"intl-relativeformat":19,"intl-relativeformat/dist/locale-data/en.js":17,"intl-relativeformat/dist/locale-data/es.js":18,"intl/locale-data/jsonp/en-US.js":27,"intl/locale-data/jsonp/es.js":28}]},{},[40]);
+},{"./en-US":49,"./es":50,"intl":25,"intl-messageformat":10,"intl-relativeformat":19,"intl-relativeformat/dist/locale-data/en.js":17,"intl-relativeformat/dist/locale-data/es.js":18,"intl/locale-data/jsonp/en-US.js":27,"intl/locale-data/jsonp/es.js":28}]},{},[41]);

@@ -2,33 +2,36 @@ var page = require('page');
 var empty = require('empty-element');
 var template = require('./template');
 var title = require("title");
+var request = require('superagent');
+var axios = require('axios');
 
-page('/', function(ctx, next){
+page('/', loadPicturesAxios , function(ctx, next){
   title('Platzigram')
   var main = document.getElementById('main-container');
 
-  var pictures = [
-    {
-        user: {
-          username: "alexeim",
-          avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
-        },
-        url: 'office.jpg',
-        likes: 0,
-        liked: false,
-        createdAt: new Date()
-    },
-    {
-        user: {
-          username: "alexeim2",
-          avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
-        },
-        url: 'office.jpg',
-        likes: 2,
-        liked: true,
-        createdAt: new Date().setDate(new Date().getDate() - 10)
-    }
-  ];
-
-  empty(main).appendChild(template(pictures));
+  empty(main).appendChild(template(ctx.pictures));
 })
+
+function loadPictures(ctx,next){
+  request
+    .get('/api/pictures')
+    .end(function(err,res){
+      if(err){
+        return console.log(err);
+      }
+      ctx.pictures = res.body;
+      next();
+    })
+}
+
+function loadPicturesAxios(ctx,next){
+  axios
+    .get('/api/pictures')
+    .then(function(res){
+      ctx.pictures = res.data;
+      next();
+    })
+    .catch(function (err){
+      console.log(err);
+    });
+}

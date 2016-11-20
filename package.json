@@ -11,6 +11,7 @@
   "author": "Alexei",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.15.2",
     "express": "^4.14.0",
     "gulp": "^3.9.1",
     "gulp-sass": "^2.3.2",
@@ -20,6 +21,7 @@
     "materialize-css": "^0.97.6",
     "page": "^1.7.1",
     "pug": "^2.0.0-beta3",
+    "superagent": "^2.3.0",
     "title": "^1.0.0"
   },
   "devDependencies": {

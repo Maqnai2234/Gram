@@ -2,29 +2,41 @@ import yo from 'yo-yo';
 import layout from '../layout';
 import translate from '../translate';
 
-var signinForm = yo`<div class="col s12 m7">
-  <div class="row">
-    <div class="signup-box">
-      <h1 class="title-logo">CloneGram</h1>
-      <form class="signup-form">
-        <div class="section">
-          <a href="" class="btn btn-fb hide-on-small-only"> ${translate.message('signup.facebook')}</a>
-          <a href="" class="btn btn-fb hide-on-med-and-up"> <i class="fa fa-facebook-official" aria-hidden="true"></i> ${translate.message('signin')}</a>
-        </div>
-        <div class="divider"></div>
-        <div class="section">
-          <input type="email" name="email" placeholder="${translate.message('email')}">
-          <input type="password" name="password" placeholder="${translate.message('password')}">
-          <button class="btn waves-effect waves-light btn-signup-form" type="submit"> ${translate.message('signup.text')}</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="login-box">
-      ${translate.message('signin.not-have-account')} <a href="/signup">${translate.message('signup.call-to-action')}</a>
-    </div>
-  </div>
-</div>`
 
-module.exports = landing(signinForm);
+export default function userPageTemplate(user){
+  var el = yo`<div class="container user-page">
+    <div class="row">
+      <div class="col s12 m10 offset-m1 l8 offset-l2 center-align heading">
+        <div class="row">
+          <div class="col s12 m10 offset-m1 l3 offset-l3 center">
+            <img src="${user.avatar}" alt="${user.username}" class="responsive-img circle" />
+          </div>
+          <div class="col s12 m10 offset-m1 l6 left-align">
+            <h2 class="hide-on-large-only center-align">${user.username}</h2>
+            <h2 class="hide-on-med-and-down left-align">${user.username}</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        ${user.pictures.map(function (picture) {
+          return yo`<div class="col s12 m6 l4">
+            <a href="/${user.username}/${picture.id}" class="picture-container">
+              <img src="${picture.src})" class="picture" />
+              <div class="likes"><i class="fa fa-heart"></i> ${picture.likes}</div>
+            </a>
+            <div id="modal${picture.id}" class="modal modal-fixed-footer">
+              <div class="modal-content center">
+                <img src="${picture.src})" />
+              </div>
+              <div class="modal-footer">
+                <div class="btn btn-flat likes"><i class="fa fa-heart"></i> ${translate.message('likes', { likes: picture.likes })}</div>
+              </div>
+            </div>
+          </div>`;
+        })}
+      </div>
+    </div>
+  </div>`
+
+  return layout(el)
+}

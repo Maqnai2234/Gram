@@ -22,6 +22,8 @@ app.use(express.static('public'));
 app.get('/', function(req, res){
   res.render("index", {title: 'Platzigram'});
 })
+
+
 app.get('/signup', function(req, res){
   res.render("index", {title: 'Platzigram | Signup' });
 })
@@ -34,7 +36,7 @@ app.get('/api/pictures', function(req, res){
     {
         user: {
           username: "alexeim",
-          avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
+          avatar: "https://scontent-eze1-1.cdninstagram.com/t51.2885-15/e15/11420480_923834564346203_763926557_n.jpg?ig_cache_key=MTAwOTQ4OTA4ODIyMTk2OTEwNA%3D%3D.2"
         },
         url: 'office.jpg',
         likes: 0,
@@ -44,7 +46,7 @@ app.get('/api/pictures', function(req, res){
     {
         user: {
           username: "alexeim2",
-          avatar: "https://scontent.fgru3-1.fna.fbcdn.net/v/t1.0-1/p160x160/12376465_10207181886259400_5516580544980386974_n.jpg?oh=b63eafcabcbce0d218bb56838635b71c&oe=5858BCEC"
+          avatar: "https://scontent-eze1-1.cdninstagram.com/t51.2885-15/e15/11420480_923834564346203_763926557_n.jpg?ig_cache_key=MTAwOTQ4OTA4ODIyMTk2OTEwNA%3D%3D.2"
         },
         url: 'office.jpg',
         likes: 2,
@@ -65,6 +67,32 @@ app.post('/api/pictures', function(req, res){
     }
     res.send('File upload');
   })
+})
+
+app.get('/api/user/:username', function(req,res){
+  const user = {
+    username: 'alexeim',
+    avatar:"https://scontent-eze1-1.cdninstagram.com/t51.2885-19/11333569_365261623669143_724161223_a.jpg",
+    pictures: [
+      {
+        id: 1,
+        src: "https://scontent-eze1-1.cdninstagram.com/t51.2885-15/e35/15337168_1518268694855332_3793207728759898112_n.jpg?ig_cache_key=MTM5ODE1ODEyNjEzMzY2MzkwNA%3D%3D.2",
+        likes: 2
+      },
+      {
+        id: 2,
+        src: "https://scontent-eze1-1.cdninstagram.com/t51.2885-15/e15/11420480_923834564346203_763926557_n.jpg?ig_cache_key=MTAwOTQ4OTA4ODIyMTk2OTEwNA%3D%3D.2",
+        likes: 10
+      }
+    ]
+
+  }
+
+  res.send(user);
+})
+
+app.get('/:username', function(req,res){
+  res.render('index', {title: `Gram - ${req.params.username}` })
 })
 
 app.listen(3000, function(err) {

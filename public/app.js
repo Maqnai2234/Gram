@@ -19479,6 +19479,14 @@ function _interopRequireDefault(obj) {
   (0, _emptyElement2.default)(main).appendChild((0, _template2.default)(ctx.user));
 });
 
+(0, _page2.default)('/:username/:id', loadUser, _header2.default, function (ctx, next) {
+  var main = document.getElementById('main-container');
+  (0, _title2.default)('Gram - ' + ctx.params.username);
+  (0, _emptyElement2.default)(main).appendChild((0, _template2.default)(ctx.user));
+
+  $('#modal' + ctx.params.id).openModal();
+});
+
 function loadUser(ctx, next) {
   return regeneratorRuntime.async(function loadUser$(_context) {
     while (1) {
